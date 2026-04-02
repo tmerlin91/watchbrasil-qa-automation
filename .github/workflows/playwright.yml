@@ -20,8 +20,8 @@ jobs:
       - name: Instalar dependências
         run: npm install
 
-      - name: Instalar Playwright + dependências
-        run: npx playwright@latest install --with-deps
+      - name: Instalar Playwright
+        run: npx playwright install chromium
 
       - name: Rodar testes
-        run: npx playwright test --reporter=list
+        run: npx playwright test --reporter=line
