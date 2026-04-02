@@ -21,7 +21,7 @@ jobs:
         run: npm install
 
       - name: Instalar Playwright + dependências
-        run: npx --yes playwright install --with-deps
+        run: npx playwright@latest install --with-deps
 
       - name: Rodar testes
         run: npx playwright test --reporter=list
