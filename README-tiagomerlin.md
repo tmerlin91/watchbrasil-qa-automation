@@ -1,3 +1,5 @@
+> Automação E2E utilizando Playwright com validação integrada entre API e UI
+
 # Teste Técnico QA - Watch Brasil
 
 ## Visão geral
