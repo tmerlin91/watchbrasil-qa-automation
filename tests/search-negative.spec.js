@@ -5,7 +5,7 @@ test('Não deve retornar resultados para busca inválida', async ({ page }) => {
   const home = new HomePage(page);
 
   await home.goto();
-  await home.search('asdasd123123invalido');
+  await home.search('testefilmeinvalido');
 
   await page.waitForLoadState('networkidle');
 

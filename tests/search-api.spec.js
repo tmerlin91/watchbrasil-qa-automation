@@ -3,7 +3,7 @@ import { HomePage } from '../pages/home.page';
 import { searchMovie } from '../services/tmdb.service';
 
 test('Buscar filme via API e validar na UI', async ({ page }) => {
-  const movie = 'Matrix';
+  const movie = 'Fast X';
 
   let movieName;
 
