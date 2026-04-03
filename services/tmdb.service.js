@@ -1,16 +1,21 @@
 import 'dotenv/config';
 
-const API_KEY = process.env.TMDB_API_KEY;
-const BASE_URL = 'https://api.themoviedb.org/3';
+export async function searchMovie(movie) {
+  try {
+    const url = `${process.env.TMDB_BASE_URL}/search/movie?query=${movie}&api_key=${process.env.TMDB_API_KEY}`;
 
-export async function searchMovie(query) {
-  const response = await fetch(
-    `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${query}`
-  );
+    const response = await fetch(url);
 
-  if (!response.ok) {
-    throw new Error(`Erro na API: ${response.status}`);
+    if (!response.ok) {
+      throw new Error(`Erro na API: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    return data.results || [];
+  } catch (error) {
+    console.error('Erro ao buscar filme:', error);
+
+    return [];
   }
-
-  return response.json();
 }

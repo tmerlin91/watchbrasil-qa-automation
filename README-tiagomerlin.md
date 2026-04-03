@@ -1,9 +1,17 @@
 # Teste Técnico QA - Watch Brasil
 
 ## Visão geral
-Projeto de automação de testes focado no fluxo de busca de conteúdo em contexto de streaming, utilizando Playwright com JavaScript.
 
-A ideia foi validar um fluxo E2E combinando API + UI, trazendo mais confiabilidade e reduzindo flakiness.
+Projeto de automação de testes focado no fluxo de busca de filmes, utilizando Playwright com JavaScript.
+A abordagem adotada combina validação via API + UI, garantindo maior confiabilidade nos testes e reduzindo falsos positivos (flakiness).
+
+---
+
+## Tecnologias utilizadas
+
+* Playwright
+* JavaScript (ES6)
+* Node.js
 
 ---
 
@@ -14,36 +22,73 @@ npm install
 npx playwright install
 npx playwright test
 ```
+
 Após a execução, o relatório pode ser visualizado com:
+
 ```bash
 npx playwright show-report evidences/report
 ```
+
 ---
 
 ## Estratégia de teste
 
 Optei por validar o fluxo de busca combinando API + UI.
-Priorizei poucos cenários com maior valor de validação, focando em confiabilidade ao invés de volume.
 
-A API garante que o dado esperado existe e está correto.  
-A UI valida se esse dado está sendo exibido corretamente para o usuário.
+* A API é utilizada como fonte de verdade para garantir que os dados existem e estão corretos.
+* A UI valida se esses dados são apresentados corretamente ao usuário.
 
-Evitei validações baseadas em texto da página, pois podem variar com idioma ou mudanças visuais. Em vez disso, validei comportamento (presença/ausência de resultados), tornando os testes mais estáveis.
+Essa abordagem reduz dependência de dados fixos e aumenta a confiabilidade dos testes.
+
+Também evitei validações frágeis como textos genéricos da página, priorizando validações baseadas em comportamento e elementos específicos.
 
 ---
 
-## Cenário negativo
+## Cenários automatizados
 
-Implementei um teste com busca inválida para validar o comportamento da aplicação quando não há resultados.
+Foram implementados 4 cenários principais:
 
-A validação foi feita verificando que nenhum resultado é exibido na tela, ao invés de depender de mensagens específicas.
+1. Busca via API + validação na UI
+
+   * Garante que um filme retornado pela API está visível na interface.
+
+2. Consistência entre API e UI
+
+   * Valida que o primeiro resultado da API corresponde ao exibido na UI.
+
+3. Busca com múltiplos resultados
+
+   * Garante que buscas genéricas retornam mais de um item.
+
+4. Cenário negativo
+
+   * Valida que uma busca inválida não retorna resultados.
+
+---
+
+## Boas práticas aplicadas
+
+* Uso de Page Object Model para organização da UI;
+* Separação de responsabilidades (pages, services, tests);
+* Uso de service layer para integração com API;
+* Validações mais robustas (evitando `innerText` global);
+* Estrutura preparada para escalabilidade;
+
+---
+
+## Retries e estabilidade
+
+O projeto utiliza retries automáticos do Playwright para reduzir impacto de falhas intermitentes.
+Isso permite identificar possíveis cenários flaky sem comprometer a execução completa da suíte.
 
 ---
 
 ## Observações
 
-1. Durante a automação, foi necessário ajustar seletores e evitar asserts frágeis (como textos genéricos), garantindo maior estabilidade dos testes.  
-2. Caso a porta do relatório esteja em uso:
+* Durante a automação, foram feitos ajustes em seletores para evitar fragilidade.
+* O projeto prioriza estabilidade e clareza ao invés de volume de testes.
+
+Caso a porta do relatório esteja em uso:
 
 ```bash
 npx playwright show-report evidences/report --port=9324
@@ -53,6 +98,7 @@ npx playwright show-report evidences/report --port=9324
 
 ## Próximos passos
 
-- Adicionar testes para cenários de paginação e filtros
-- Validar comportamento de erro da API
-- Integrar execução em pipeline CI
+* Adicionar testes de paginação;
+* Validar filtros de busca;
+* Cobrir cenários de erro da API (ex: 401, 500);
+* Adicionar parametrização de testes (data-driven);

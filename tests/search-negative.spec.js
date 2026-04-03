@@ -1,14 +1,16 @@
-import { test, expect } from '@playwright/test';
-import { HomePage } from '../pages/home.page';
+import { test, expect } from '../fixtures/test.fixture';
+import { movies } from '../data/movies.data';
 
-test('Não deve retornar resultados para busca inválida', async ({ page }) => {
-  const home = new HomePage(page);
+test('Não deve retornar resultados para filme inválido', async ({ home, api, page }) => {
+  const movie = movies.invalid;
+
+  const moviesList = await api.searchMovie(movie);
+  expect(moviesList.length).toBe(0);
 
   await home.goto();
-  await home.search('testefilmeinvalido');
+  await home.search(movie);
 
   await page.waitForLoadState('networkidle');
 
-  // valida ausência de filmes
   await expect(page.locator('.card')).toHaveCount(0);
 });
